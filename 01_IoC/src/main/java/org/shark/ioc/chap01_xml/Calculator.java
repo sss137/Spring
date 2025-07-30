@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor //Calculator(): 디폴트 생성자
+@NoArgsConstructor  //Calculator(): 디폴트 생성자
 @AllArgsConstructor //Calculator(String, int, Adder, Subtractor, Multiplier, Divider)
 @Getter
 @Setter
