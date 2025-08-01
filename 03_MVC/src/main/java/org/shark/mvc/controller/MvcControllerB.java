@@ -35,6 +35,7 @@ public class MvcControllerB {
     System.out.println("sort: " + sort);
 
     return "b/list";
+    
   }
   
 
@@ -62,8 +63,10 @@ public class MvcControllerB {
   //요청 주소: /b/regist?title=제목&hit=0
   @RequestMapping("/regist")
   public String methodC(BoardDTO board) { //커맨드 객체를 이용한 요청 파라미터 처리: 생성자 또는 Setter를 이용해서 요청 파라미터를 BoardDTO의 멤버 변수(필드)에 저장합니다.
+    
     System.out.println("board: " + board);
     return "b/regist";
+    
   }
   
   //요청 주소: /b/boards/1(마지막 1은 경로에 포함된 값으로 경로 변수(Path Variable)이라고 합니다.)
@@ -74,6 +77,7 @@ public class MvcControllerB {
     System.out.println("bid: " + bid);
     
     return "b/detail";
+    
   }
         
 }

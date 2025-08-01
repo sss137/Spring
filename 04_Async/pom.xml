@@ -4,7 +4,7 @@
   
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.shark</groupId>
-  <artifactId>03_MVC</artifactId>
+  <artifactId>04_Async</artifactId>
   <version>1.0.0</version>
   <packaging>war</packaging>
   
@@ -23,7 +23,7 @@
   <!-- dependencies: 디펜던시(=jar 파일)를 모아둡니다. -->
   <!-- 
     dependency's scope
-    1. compile: 디폴트. 컴파일/테스트/빌드/배포 시 모두 사용합니다.
+    1. compile: 디폴트. 컴파일/테스트/빌드/배포/ 시 모두 사용합니다.
     2. provided: 컴파일/빌드 시에는 사용하고, 배포 시 사용하지 않습니다.(코딩할 땐 사용하고, WAR 파일로 배포할 땐 톰캣이 제공하는 API를 사용합니다.)
     3. test: 테스트 시에만 사용합니다.
     4. runtime: 실행 시에만 사용합니다.
@@ -152,6 +152,18 @@
       <version>1.4</version>
     </dependency>
     
+    <!-- Jackson Library(Jackson Databind, Jackson Dataformat XML) -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.12.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-xml</artifactId>
+      <version>2.12.7</version>
+    </dependency>
+    
   </dependencies>
 
   <build>
@@ -179,6 +191,7 @@
         <version>3.1.2</version>
       </plugin>
     </plugins>
+    
   </build>
   
 </project>

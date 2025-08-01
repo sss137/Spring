@@ -21,6 +21,7 @@ public class MvcControllerA {
   
   @RequestMapping(value = "/list", method = RequestMethod.GET)   //GET 방식의 경우 method 생략할 수 있습니다.
   public String methodA() {
+    
     System.out.println("methodA()");
     return "a/list";
     /*
@@ -34,6 +35,7 @@ public class MvcControllerA {
   
   @RequestMapping("/detail")   //value만 작성하는 경우 "value = " 생략할 수 있습니다.
   public void methodB() {
+    
     System.out.println("methodB()");
     /*
      * return이 없는 경우 처리 과정
@@ -46,6 +48,7 @@ public class MvcControllerA {
   
   @RequestMapping("/b/c/d/regist")   //요청 주소(/a/b/c/d/regist)와 프로젝트 내 경로(a/regist)를 다르게 지정하면 보안에 도움이 됩니다.
   public ModelAndView methodC() {
+    
     ModelAndView mv = new ModelAndView();
     mv.setViewName("a/regist");
     return mv;
