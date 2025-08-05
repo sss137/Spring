@@ -1,4 +1,4 @@
-package org.shark.crud.model.dto;
+package org.shark.file.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +13,10 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
+public class NoticeDTO {
 
-public class UserDTO {
-
-  private Integer uid;
-  private String email;
-  private String password;
-  private byte[] salt;
-  private String nickname;
+  private Integer nid;
+  private String title;
+  private String content;
   
 }

@@ -55,7 +55,7 @@ public class BoardController {
     boolean result = boardService.addBoard(board);
     //redirect 시 데이터 전달은 Model을 이용할 수 없습니다.
     //redirect 시 데이터 전달은 RedirectAttributes를 이용할 수 있습니다.
-    redirectAttrs.addAttribute("msg", result ? "등록 성공" : "등록 실패");
+    redirectAttrs.addFlashAttribute("msg", result ? "등록 성공" : "등록 실패");
     
     //등록 후 목록 보기 요청을 redirect 합니다.
     return "redirect:/board/list";  //@GetMapping("/board/list")으로 요청합니다.
