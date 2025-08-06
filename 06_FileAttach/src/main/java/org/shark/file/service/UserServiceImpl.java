@@ -9,10 +9,12 @@ import org.shark.file.model.dto.UserDTO;
 import org.shark.file.repository.UserDAO;
 import org.shark.file.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,11 +22,13 @@ public class UserServiceImpl implements UserService {
   private final UserDAO userDAO;
   private final FileUtil fileUtil;
   
+  @Transactional(readOnly = true)
   @Override
   public List<UserDTO> findAllUsers() {
     return userDAO.getAllUsers();
   }
 
+  @Transactional(readOnly = true)
   @Override
   public UserDTO findUserById(Integer uid) {
     return userDAO.getUserById(uid);
@@ -37,7 +41,7 @@ public class UserServiceImpl implements UserService {
       //첨부 파일을 저장할 경로
       String filePath = fileUtil.getFilePath();
       
-      //디렉터리 없으면 생성하기
+      //디렉터리가 없으면 생성하기
       Path uploadPath = Paths.get(filePath);
       if(Files.notExists(uploadPath)) {
         Files.createDirectories(uploadPath);

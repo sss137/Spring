@@ -13,8 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @RequestMapping("/user")
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 
