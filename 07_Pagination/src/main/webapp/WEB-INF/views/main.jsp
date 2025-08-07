@@ -12,6 +12,10 @@
 <body>
   <h1>Hello World</h1>
   <a href="${contextPath}/user/list">회원 목록</a>
+  <br>
+  
+  <a href="${contextPath}/user/scroll-list">회원 목록(ASYNC + 무한스크롤)</a>
+  <br>
   
 </body>
 </html>

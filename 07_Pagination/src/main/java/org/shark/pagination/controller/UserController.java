@@ -33,6 +33,11 @@ public class UserController {
     
   }
   
+  @GetMapping("/scroll-list")
+  public String scrollList() {
+    return "user/scroll";
+  }
+  
 }
 
 
