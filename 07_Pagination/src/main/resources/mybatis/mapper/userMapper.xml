@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mybatis.mapper.userMapper">
+
+  <select id="getUsers" parameterType="Map" resultType="UserDTO">
+    SELECT uid, first_name, last_name, email, gender, ip_address
+      FROM tbl_user
+     ORDER BY uid ${sort}  <!-- 복습: #{}은 문자열이 넘어오면 ''가 붙고 숫자는 안 붙음, 따라서 ${} 사용 -->
+     LIMIT #{offset}, #{size}
+  </select>
+  
+  <select id="getUserCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+      FROM tbl_user
+  </select>
+  
+</mapper>
+
+
+
+
