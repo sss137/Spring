@@ -1,8 +1,8 @@
-package org.shark.pagination.util;
+package org.shark.hierarchy.util;
 
 import java.util.Map;
 
-import org.shark.pagination.model.dto.PageDTO;
+import org.shark.hierarchy.model.dto.PageDTO;
 import org.springframework.stereotype.Component;
 
 /**
