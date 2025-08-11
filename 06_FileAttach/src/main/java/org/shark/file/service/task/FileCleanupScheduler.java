@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.shark.file.model.dto.AttachDTO;
 import org.shark.file.repository.NoticeDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,19 +36,24 @@ public class FileCleanupScheduler {
     
     //2. 해당 폴더의 파일 목록 조회
     File dir = new File(dirPath);
-    if(!dir.exists() || !dir.isDirectory()) {
+    if (!dir.exists() || !dir.isDirectory()) {
       return;
     }
     File[] files = dir.listFiles();
-    List<String> storedFilenames = Arrays.stream(files)
-                                         .map(file -> file.getName())
-                                         .collect(Collectors.toList());
     
     //3. DB에서 해당 경로를 가진 첨부파일 목록 조회
-    
+    List<AttachDTO> attaches = noticeDAO.getAttachesByFilePath(dirPath);
+    List<String> dbFilenames = attaches.stream()
+      .map(attach -> attach.getFilesystemName())
+      .collect(Collectors.toList());
     
     //4. 비교 및 삭제(삭제된 파일의 로그 남기기)
-    
+    Arrays.stream(files)
+    .filter(file -> !dbFilenames.contains(file.getName()))
+    .forEach(file -> {
+      System.out.println(file.getPath() + "파일이 스케쥴러에 의해 삭제되었습니다.");
+      file.delete();
+    });
     
   }
   

@@ -43,4 +43,8 @@ public class NoticeDAO {
     return sqlSession.selectOne("mybatis.mapper.noticeMapper.getAttachById", aid);
   }
   
+  public List<AttachDTO> getAttachesByFilePath(String filePath) {
+    return sqlSession.selectList("mybatis.mapper.noticeMapper.getAttachesByFilePath", filePath);
+  }
+  
 }
