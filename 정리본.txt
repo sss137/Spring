@@ -225,7 +225,7 @@ src/main/resources/TodoMapper.xml
 </mapper>
 --------------------------
 src/main/webapp/WEB-INF/spring/root-context.xml
-  -> Spring Container에 빈(객체) 만들기 (타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
+  -> Spring Container에 빈(객체) 만들기(타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
 
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"

@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+  <!-- Spring Container에 빈(객체) 만들기(타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate) -->
+
   <!-- 1. HikariConfig(jdbcURL 사용할 데이터베이스 지정) -->
   <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
     <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
@@ -16,7 +18,7 @@
     <constructor-arg ref="hikariConfig" />  
   </bean>
   
-  <!-- 3. SqlSessionFactoryBean -->
+  <!-- 3. SqlSessionFactoryBean(mybatis-config.xml 파일과 Mapper.xml 파일 위치 지정) -->
   <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
     <property name="dataSource" ref="hikariDataSource" />
     <property name="configLocation" value="classpath:mybatis-config.xml" />
