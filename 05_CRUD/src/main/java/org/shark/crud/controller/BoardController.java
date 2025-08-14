@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor   //Spring Container에 있는 BoardService 타입의 빈을 
+@RequiredArgsConstructor   //Spring Container에 있는 BoardService, UserService 타입의 빈을 
                            //private final BoardService boardservice와 
                            //private final UserService userService에 자동 주입(@Autowired)하기 위한 생성자
 @RequestMapping("/board")

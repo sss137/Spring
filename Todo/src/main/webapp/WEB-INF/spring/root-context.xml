@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- 1. HikariConfig(jdbcURL 사용할 데이터베이스 지정) -->
+  <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db_todo?characterEncoding=UTF-8&amp;serverTimezone=UTC" />
+    <property name="username" value="goodee" />
+    <property name="password" value="goodee" />
+  </bean>
+  
+  <!-- 2. HikariDataSource -->
+  <bean class="com.zaxxer.hikari.HikariDataSource" id="hikariDataSource">
+    <constructor-arg ref="hikariConfig" />  
+  </bean>
+  
+  <!-- 3. SqlSessionFactoryBean -->
+  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+    <property name="dataSource" ref="hikariDataSource" />
+    <property name="configLocation" value="classpath:mybatis-config.xml" />
+    <property name="mapperLocations" value="classpath:*Mapper.xml" />
+  </bean>
+  
+  <!-- 4. SqlSessionTemplate -->
+  <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+    <constructor-arg ref="sqlSessionFactoryBean" />
+  </bean>
+ 
+</beans>
+ 

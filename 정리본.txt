@@ -1,0 +1,420 @@
+pom.xml
+  <artifactId>TodoApp</...>
+
+http://localhost:8080/TodoApp    이 주소를 대표 주소로 부릅니다 : Context Path   ${contextPath}
+--------------------------
+프로젝트 실행
+  @RequestMapping(value = "/")  -> ContextPath 주소를 입력하면 main 메소드가 실행됩니다.
+  public String main() {
+    return "main";  ->  /WEB-INF/views/main.jsp 를 열겠습니다.
+  }
+--------------------------
+*** 요청
+1. 화면에서 GET 요청
+  <a href="${contextPath}/todo/list">목록</a>    http://localhost:8080/TodoApp/todo/list
+  location.href="${contextPath}/todo/list"
+  <form action="${contextPath}/todo/list">
+2. 서버에서 GET 요청
+  return "redirect:/todo/list";
+***
+--------------------------
+목록
+main.jsp
+  <a href="${contextPath}/todo/list">목록</a>
+TodoController
+  @GetMapping("/todo/list")
+  public String list() {
+    
+    return "todo/list";
+  }
+--------------------------
+등록 폼
+list.jsp
+  <button onclick="todoWriteForm()">작성하러가기</button>
+  <a href="javascript:todoWriteForm()">작성하러가기</a>
+  <script type="text/javascript">
+    function todoWriteForm() {
+      location.href="${contextPath}/todo/write";
+    }
+  </script>
+TodoController
+  @GetMapping("/todo/write")
+  public String writeForm() {
+    
+    return "todo/writeForm";
+  }
+--------------------------
+등록
+writeForm.jsp
+  <form method="post"
+        action="${contextPath}/todo/create">
+  
+    <button type="submit">제출</button>      
+  </form>
+TodoController
+  @PostMapping("/todo/create")
+  public String create() {
+    
+    return "redirect:/todo/list";
+  }
+--------------------------
+* 모든 요청 주소를 아래와 같이 수정하려고 합니다.
+http://localhost:8080/TodoApp/td/list
+http://localhost:8080/TodoApp/td/write
+http://localhost:8080/TodoApp/td/create
+
+1) 화면
+  <a href="${contextPath}/td/list">목록</a>
+  location.href="${contextPath}/td/write";
+  <form method="post" action="${contextPath}/td/create">
+2) 컨트롤러
+  @GetMapping("/td/list")
+  @GetMapping("/td/write")
+  @PostMapping("/td/create")
+  public String create() {
+    
+    return "redirect:/td/list";
+  }
+--------------------------
+컨트롤러 레벨로 시작 주소 고정하기
+@RequestMapping("/td")  ->  요청 주소 앞에 /td 추가해 주세요.
+public class TodoController {
+  @GetMapping("/list")
+  @GetMapping("/write")
+  @PostMapping("/create")
+}
+--------------------------
+상세
+list.jsp
+  <table border="1">
+    <tbody>
+      <tr>
+        <td><a href="${contextPath}/td/detail">제목1</a></td>
+        <td>작성일1</td>
+      </tr>
+      <tr>
+        <td><a href="${contextPath}/td/detail">제목2</a></td>
+        <td>작성일2</td>
+      </tr>
+    </tbody>
+  </table>
+TodoController
+  @GetMapping("/detail")
+  public String detail() {
+    
+    return "todo/detail";
+  }
+--------------------------
+편집 폼
+detail.jsp
+  <button onclick="editForm()">편집</button>
+  <script type="text/javascript">
+    function editForm() {
+      location.href="${contextPath}/td/edit";
+    }
+  </script>
+TodoController
+  @GetMapping("/edit")
+  public String editForm() {
+    
+    return "todo/editForm";
+  }
+--------------------------
+* 연습
+  detail.jsp 에 목록 보기로 이동하는 버튼을 만들고 동작을 확인하세요.
+
+detail.jsp
+  <button onclick="todoList()">Todo목록</button>
+  <script type="text/javascript">
+    function todoList() {
+      location.href="${contextPath}/td/list";
+    }
+  </script>
+--------------------------
+수정
+editForm.jsp
+  <form method="post"
+        action="${contextPath}/td/update">
+        
+    <button type="submit">수정</button>      
+  </form>
+TodoController
+  @PostMapping("/update")
+  public String update() {
+    
+    return "redirect:/td/detail";
+  }
+--------------------------
+삭제
+  <form method="post"
+        action="${contextPath}/td/delete"
+        onsubmit="onDelete()">
+  
+    <button type="submit">삭제</button>      
+  </form>
+  <script type="text/javascript">
+  	function onDelete() {
+  	  // 취소하면 서브밋 방지하기
+  	  if ( !confirm("현재 게시글을 삭제하시겠습니까?") ) {
+  	    window.event.preventDefault();
+  	  }
+  	}
+  </script>
+TodoController
+  @PostMapping("/delete")
+  public String delete() {
+    
+    return "redirect:/td/list";
+  }
+--------------------------
+* 새 프로젝트 만들어서 연습
+  project
+--------------------------
+src/main/resources/schema.sql
+
+create database db_todo;
+
+use db_todo;
+
+create table tbl_todo (
+  tid int not null primary key auto_increment,
+  title varchar(100) not null,
+  content text,
+  created_at timestamp
+);
+--------------------------
+TodoDTO
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+public class TodoDTO {
+  private Integer tid;
+  private String title;
+  private String content;
+  private Timestamp createdAt;
+}
+--------------------------
+src/main/resources/mybatis-config.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+  <!-- 마이바티스 환경 설정 (snake_case To camelCase) -->
+  <settings>
+    <setting name="mapUnderscoreToCamelCase" value="true" />
+  </settings>
+
+</configuration>
+--------------------------
+src/main/resources/TodoMapper.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.shark.todo.mapper.TodoMapper">
+
+
+
+</mapper>
+--------------------------
+src/main/webapp/WEB-INF/spring/root-context.xml
+  -> Spring Container에 빈(객체) 만들기 (타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- 1. HikariConfig (jdbcURL에서 사용할 데이터베이스 지정) -->
+  <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db_todo?characterEncoding=UTF-8&amp;serverTimezone=UTC" />
+    <property name="username" value="goodee" />
+    <property name="password" value="goodee" />
+  </bean>
+  
+  <!-- 2. HikariDataSource -->
+  <bean class="com.zaxxer.hikari.HikariDataSource" id="hikariDataSource">
+    <constructor-arg ref="hikariConfig" />
+  </bean>
+  
+  <!-- 3. SqlSessionFactoryBean (mybatis-config.xml 파일과 Mapper.xml 파일 위치 지정) -->
+  <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+    <property name="dataSource" ref="hikariDataSource" />
+    <property name="configLocation"  value="classpath:mybatis-config.xml" />
+    <property name="mapperLocations" value="classpath:*Mapper.xml" />
+  </bean>
+  
+  <!-- 4. SqlSessionTemplate -->
+  <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+    <constructor-arg ref="sqlSessionFactoryBean" />
+  </bean>
+
+</beans>
+--------------------------
+프로젝트 실행해서 오류 여부 확인하기
+--------------------------
+MyBatis
+SQL Mapping Framework
+: Mapper.xml 에 저장된 쿼리를 자바에서 호출할 수 있도록 해 주는 프레임워크
+: Mapper.xml 에 저장된 쿼리마다 id를 부여하고, 해당 id를 이용해 자바에서 호출하는 방식
+: Mapper.xml 에 저장된 쿼리를 실행하는 건 SqlSessionTemplate 
+* SqlSessionTemplate이 지원하는 메소드
+1. selectList()
+2. selectOne()
+3. insert()
+4. update()
+5. delete()
+자바 웹 애플리케이션에서는 DAO가 쿼리문을 담당하므로, DAO에 SqlSessionTemplate을 가져다 두고 사용.
+--------------------------
+TodoDAO
+@Repository  ->  Spring Container에 빈(객체) 만들기 (TodoDAO 타입의 빈(todoDAO)이 생성됨)
+public class TodoDAO {
+
+  @Autowired  ->  Spring Container에서 SqlSessionTemplate 타입의 빈 가져올 때 사용 (수업에서는 @RequiredArgsConstructor로 대신 처리)
+  private SqlSessionTemplate sqlSession;
+
+}
+--------------------------
+기능 구현 시작) 목록 조회
+
+TodoMapper.xml
+<mapper namespace="org.shark.todo.mapper.TodoMapper">
+  <select id="selectTodoList" resultType="org.shark.todo.model.dto.TodoDTO">
+    SELECT tid, title, content, created_at
+      FROM tbl_todo
+     ORDER BY tid DESC
+     LIMIT 0, 10
+  </select>
+</mapper>
+
+TodoDAO
+@Repository
+public class TodoDAO {
+
+  @Autowired
+  private SqlSessionTemplate sqlSession;
+  
+  public List<TodoDTO> todoList() {
+    List<TodoDTO> todoList = sqlSession.selectList("org.shark.todo.mapper.TodoMapper.selectTodoList");
+    return todoList;
+  }
+  
+}
+
+TodoService
+public interface TodoService {
+  List<TodoDTO> getTodoList();
+}
+
+TodoServiceImpl
+@Service  // Spring Container에 TodoService 타입의 빈이 생성
+public class TodoServiceImpl implements TodoService {
+
+  // TodoDAO 빈을 Spring Container에서 가져옵니다.
+  @Autowired
+  private TodoDAO todoDAO;
+  
+  @Override
+  public List<TodoDTO> getTodoList() {
+    List<TodoDTO> todoList = todoDAO.todoList();
+    return todoList;  // 컨트롤러에게 todoList 반환하기
+  }
+
+}
+
+***** 목록 반환하기 중간 연습
+  1. TodoMapper.xml에 전체 Todo 개수를 구하는 쿼리문 작성하기.
+  2. TodoDAO에 쿼리문 호출하는 todoCount() 메소드 작성하기.
+  3. TodoServiceImpl에 있는 getTodoList() 메소드에서 todoCount() 호출하고 
+     todoList와 todoCount를 한 번에 컨트롤러로 반환하기
+
+TodoMapper.xml
+  <select id="selectTodoCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+      FROM tbl_todo
+  </select>
+
+TodoDAO
+  public Integer todoCount() {
+    Integer todoCount = sqlSession.selectOne("org.shark.todo.mapper.TodoMapper.selectTodoCount");
+    return todoCount;
+  }
+
+TodoService
+  public interface TodoService {
+    // 기존 List<TodoDTO> getTodoList(); 코드 수정
+    Map<String, Object> getTodoList();
+  }
+
+TodoServiceImpl
+  @Override
+  public Map<String, Object> getTodoList() {
+    List<TodoDTO> todoList = todoDAO.todoList();
+    Integer todoCount = todoDAO.todoCount();
+    return Map.of("todoList", todoList, "todoCount", todoCount);
+  }
+
+***** 목록 반환하기 중간 연습 끝
+
+public class TodoController {
+
+  // TodoService 타입의 빈을 Spring Container에서 가져오기
+  @Autowired
+  private TodoService todoService;
+  
+  @GetMapping("/list")
+  public String list(Model model) {
+    Map<String, Object> map = todoService.getTodoList();
+    model.addAttribute("todoList", map.get("todoList"));    // 화면에서 확인할 수 있도록 모델에 바인딩 
+    model.addAttribute("todoCount", map.get("todoCount"));  // 화면에서 확인할 수 있도록 모델에 바인딩 
+    // System.out.println("todoList: " + map.get("todoList"));
+    // System.out.println("todoCount: " + map.get("todoCount"));
+    return "todo/list";
+  }
+
+}
+
+list.jsp
+  <table border="1">
+    <caption>전체 게시물 개수: ${todoCount}개</caption>
+    <tbody>
+      <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 TodoDTO이다. --%>
+      <c:forEach items="${todoList}" var="todo">      
+        <tr>
+          <td><a href="${contextPath}/td/detail">${todo.title}</a></td>
+          <td>${todo.createdAt}</td>
+        </tr>
+      </c:forEach>
+    </tbody>
+  </table>
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+--------------------------
+
+
+
+
+
+

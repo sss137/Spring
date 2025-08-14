@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="org.shark.todo.mapper.TodoMapper">
+
+  <select id="selectTodoList" resultType="org.shark.todo.model.dto.TodoDTO">
+    SELECT tid, title, content, created_at
+      FROM tbl_todo
+     ORDER BY tid DESC
+     LIMIT 0, 10
+  </select>
+  
+  <select id="selectTodoCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+      FROM tbl_todo
+  </select>
+
+</mapper>
+
+
+
+
