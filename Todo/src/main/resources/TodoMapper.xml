@@ -16,6 +16,29 @@
     SELECT COUNT(*)
       FROM tbl_todo
   </select>
+  
+  <select id="selectTodoById" parameterType="java.lang.Integer" resultType="org.shark.todo.model.dto.TodoDTO">
+    SELECT tid, title, content, created_at
+      FROM tbl_todo
+     WHERE tid = #{tid}
+  </select>
+  
+  <update id="updateTodo" parameterType="org.shark.todo.model.dto.TodoDTO">
+    UPDATE tbl_todo
+      SET title = #{title}, content = #{content}
+     WHERE tid = #{tid}  
+  </update>
+  
+  <delete id="deleteTodo" parameterType="java.lang.Integer">
+    DELETE 
+      FROM tbl_todo
+     WHERE tid = #{tid}
+  </delete>
+  
+  <insert id="insertTodo" parameterType="org.shark.todo.model.dto.TodoDTO"  useGeneratedKeys="true" keyProperty="tid">
+    INSERT INTO tbl_todo(title, content, created_at)
+    VALUES(#{title}, #{content}, CURRENT_TIMESTAMP)
+  </insert>
 
 </mapper>
 

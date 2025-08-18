@@ -25,12 +25,28 @@
     <tbody>
     <c:forEach items="${todoList}" var="todo">    <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 todoDTO이다. --%>
       <tr>
-        <td><a href="${contextPath}/td/detail">${todo.title}</a></td>
+        <td><a href="${contextPath}/td/detail?tid=${todo.tid}">${todo.title}</a></td>
         <td>${todo.createdAt}</td>
       </tr>
     </c:forEach>
     </tbody>
   </table>
   
+  <script type="text/javascript">
+  const deleteError = "${deleteError}";
+  if(deleteError !== "") {
+    alert(deleteError);
+  }
+  
+  const msg = "${msg}";
+  if(msg !== "") {
+    alert(msg);
+  }
+  </script>
+  
 </body>
 </html>
+
+
+
+

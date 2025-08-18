@@ -225,7 +225,7 @@ src/main/resources/TodoMapper.xml
 </mapper>
 --------------------------
 src/main/webapp/WEB-INF/spring/root-context.xml
-  -> Spring Container에 빈(객체) 만들기(타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
+  -> Spring Container에 빈(객체) 만들기 (타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
 
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -396,25 +396,234 @@ list.jsp
     </tbody>
   </table>
 --------------------------
+상세
 
+list.jsp에 상세 요청 주소에 쿼리 스트링 추가하기
+  <td><a href="${contextPath}/td/detail?tid=${todo.tid}">${todo.title}</a></td>
+
+TodoMapper.xml
+  <select id="selectTodoById" parameterType="java.lang.Integer" resultType="org.shark.todo.model.dto.TodoDTO">
+    SELECT tid, title, content, created_at
+      FROM tbl_todo
+     WHERE tid = #{tid}
+  </select>
+
+TodoDAO
+  public TodoDTO selectTodoById(Integer tid) {
+    TodoDTO todo = sqlSession.selectOne("org.shark.todo.mapper.TodoMapper.selectTodoById", tid);
+    return todo;
+  }
+
+TodoService
+  TodoDTO getTodoById(Integer tid);
+
+TodoServiceImpl
+  @Override
+  public TodoDTO getTodoById(Integer tid) {
+    if (tid == null || tid <= 0) {
+      return null;
+    }
+    return todoDAO.selectTodoById(tid);
+  }
+
+TodoController
+  @GetMapping("/detail")
+  public String detail(@RequestParam(defaultValue = "0") Integer tid, Model model) {
+    TodoDTO todo = todoService.getTodoById(tid);
+    if (todo == null) {
+      model.addAttribute("error", "해당 게시글을 찾을 수 없습니다.");
+      return "error/404error";
+    }
+    model.addAttribute("todo", todo);  // forward 시 모델에 바인딩
+    return "todo/detail";
+  }
+
+detail.jsp
+  <div>${todo.tid}</div>
+  <div>${todo.title}</div>
+  <div>${todo.content}</div>
+  <div>${todo.createdAt}</div>
+
+error/404error.jsp
+  <h1>해당 게시글을 찾을 수 없습니다.</h1>
+  <a href="${contextPath}">홈으로</a>
 --------------------------
+편집 화면
 
+detail.jsp에 편집 화면 요청 주소에 쿼리 스트링 추가하기
+  <button onclick="editForm()">편집</button>
+  <script type="text/javascript">
+    function editForm() {
+      location.href="${contextPath}/td/edit?tid=${todo.tid}";
+    }
+  </script>
+
+TodoController
+  @GetMapping("/edit")
+  public String editForm(@RequestParam(defaultValue = "0") Integer tid, Model model) {
+    TodoDTO todo = todoService.getTodoById(tid);
+    if (todo == null) {
+      model.addAttribute("error", "해당 게시글을 찾을 수 없습니다.");
+      return "error/404error";
+    }
+    model.addAttribute("todo", todo);  // forward 시 모델에 바인딩
+    return "todo/editForm";
+  }
+
+editForm.jsp
+  <h1>Todo Edit Form</h1>
+  
+  <form method="post"
+        action="${contextPath}/td/update">
+    
+    <label for="title">제목</label>
+    <br>
+    <input type="text" id="title" name="title" value="${todo.title}">
+    <br>
+    
+    <label for="content">내용</label>
+    <br>
+    <textarea id="content" name="content">${todo.content}</textarea>
+    <br>
+    
+    <input type="hidden" name="tid" value="${todo.tid}">
+    <button type="submit">수정</button>
+    
+  </form>
+
+error/404error.jsp
+  <h1>해당 게시글을 찾을 수 없습니다.</h1>
+  <a href="${contextPath}">홈으로</a>
 --------------------------
+수정
 
+TodoMapper.xml
+  <update id="updateTodo" parameterType="org.shark.todo.model.dto.TodoDTO">
+    UPDATE tbl_todo
+       SET title = #{title}, content = #{content}
+     WHERE tid = #{tid}
+  </update>
+
+TodoDAO
+  public int updateTodo(TodoDTO todo) {
+    int updatedCount = sqlSession.update("org.shark.todo.mapper.TodoMapper.updateTodo", todo);
+    return updatedCount;
+  }
+
+TodoService
+  boolean updateTodo(TodoDTO todo);
+
+TodoServiceImpl
+  @Override
+  public boolean updateTodo(TodoDTO todo) {
+    int updatedCount = todoDAO.updateTodo(todo);
+    return updatedCount > 0;
+  }
+
+TodoController
+  @PostMapping("/update")
+  public String update(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+    boolean success = todoService.updateTodo(todo);
+    redirectAttr.addFlashAttribute("msg", success ? "수정 성공" : "수정 실패")  // redirect 시 리다이렉트어트리뷰트에 플래시로 바인딩
+                .addAttribute("tid", todo.getTid());  // 쿼리 스트링 만들어서 redirect 주소에 추가 (?tid=1)
+    return "redirect:/td/detail";
+  }
+
+detail.jsp
+  msg 출력 코드 추가
+  <script type="text/javascript">
+    const msg = "${msg}";
+    if (msg !== "")
+      alert(msg);
+  </script>
 --------------------------
+삭제
 
+TodoMapper.xml
+  <delete id="deleteTodo" parameterType="java.lang.Integer">
+    DELETE
+      FROM tbl_todo
+     WHERE tid = #{tid}
+  </delete>
+
+TodoDAO
+  public int deleteTodo(Integer tid) {
+    int deletedCount = sqlSession.delete("org.shark.todo.mapper.TodoMapper.deleteTodo", tid);
+    return deletedCount;
+  }
+
+TodoService
+  boolean deleteTodo(Integer tid);
+
+TodoServiceImpl
+  @Override
+  public boolean deleteTodo(Integer tid) {
+    int deletedCount = todoDAO.deleteTodo(tid);
+    return deletedCount > 0;
+  }
+
+TodoController
+  @PostMapping("/delete")
+  public String delete(@RequestParam(defaultValue = "0") Integer tid, RedirectAttributes redirectAttr) {
+    if (tid == null || tid <= 0) {
+      redirectAttr.addFlashAttribute("deleteError", "삭제 실패");
+      return "redirect:/td/list";
+    }
+    boolean success = todoService.deleteTodo(tid);
+    redirectAttr.addFlashAttribute("msg", success ? "삭제 성공" : "삭제 실패");
+    return "redirect:/td/list";
+  }
+
+list.jsp
+  <script type="text/javascript">
+  
+    const deleteError = "${deleteError}";
+    if (deleteError !== "")
+      alert(deleteError);
+    
+    const msg = "${msg}";
+    if (msg !== "")
+      alert(msg);
+    
+  </script>
 --------------------------
+등록
 
---------------------------
+TodoMapper.xml
+  <insert id="insertTodo" parameterType="org.shark.todo.model.dto.TodoDTO" useGeneratedKeys="true" keyProperty="tid">
+    INSERT INTO tbl_todo (title, content, created_at)
+    VALUES (#{title}, #{content}, CURRENT_TIMESTAMP)
+  </insert>
 
---------------------------
+TodoDAO
+  public int insertTodo(TodoDTO todo) {
+    int insertedCount = sqlSession.insert("org.shark.todo.mapper.TodoMapper.insertTodo", todo);
+    return insertedCount;
+  }
 
---------------------------
+TodoService
+  boolean createTodo(TodoDTO todo);
 
---------------------------
+TodoServiceImpl
+  @Override
+  public boolean createTodo(TodoDTO todo) {
+    int insertedCount = todoDAO.insertTodo(todo);
+    return insertedCount > 0;
+  }
 
-
-
-
-
-
+TodoController
+  // 등록 후 목록으로 가기
+  @PostMapping("/create")
+  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+    boolean success = todoService.createTodo(todo);
+    redirectAttr.addFlashAttribute("msg", success ? "등록 성공" : "등록 실패");
+    return "redirect:/td/list";
+  }
+  // 등록 후 상세로 가기
+  @PostMapping("/create")
+  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+    boolean success = todoService.createTodo(todo);
+    redirectAttr.addFlashAttribute("msg", success ? "등록 성공" : "등록 실패")
+                .addAttribute("tid", todo.getTid());
+    return "redirect:/td/detail";
+  }

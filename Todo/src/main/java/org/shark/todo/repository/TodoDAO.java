@@ -23,5 +23,27 @@ public class TodoDAO {
     return todoCount;
   }
   
+  public TodoDTO selectTodoById(Integer tid) {
+    TodoDTO todo = sqlSession.selectOne("org.shark.todo.mapper.TodoMapper.selectTodoById", tid);
+    return todo;
+  }
+  
+  public int updateTodo(TodoDTO todo) {
+    int updatedCount = sqlSession.update("org.shark.todo.mapper.TodoMapper.updateTodo", todo);
+    return updatedCount;
+  }
+  
+  public int deleteTodo(Integer tid) {
+    int deletedCount = sqlSession.delete("org.shark.todo.mapper.TodoMapper.deleteTodo", tid);
+    return deletedCount;
+  }
+  
+  public int insertTodo(TodoDTO todo) {
+    int insertedCount = sqlSession.insert("org.shark.todo.mapper.TodoMapper.insertTodo", todo);
+    return insertedCount;
+  }
   
 }
+
+
+

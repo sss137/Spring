@@ -11,10 +11,15 @@
 </head>
 <body>
   <h1>Todo Detail</h1>
+  <div>${todo.tid}</div>
+  <div>${todo.title}</div>
+  <div>${todo.content}</div>
+  <div>${todo.createdAt}</div>
+  
   <button onclick="updateForm()">편집</button>
   <script type="text/javascript">
     function updateForm() {
-      location.href="${contextPath}/td/edit";
+      location.href="${contextPath}/td/edit?tid=${todo.tid}";
     }
   </script>
   
@@ -25,7 +30,14 @@
     function toList() {
       location.href="${contextPath}/td/list";
     }
+    const msg = "${msg}";
+    if(msg !== "") {
+      alert(msg);
+    }
   </script>
   
 </body>
 </html>
+
+
+

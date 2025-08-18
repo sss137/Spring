@@ -22,4 +22,34 @@ public class TodoServiceImpl implements TodoService {
     return Map.of("todoList", todoList, "todoCount", todoCount);   //컨트롤러에게 todoList 반환하기
   }
   
+  @Override
+  public TodoDTO getTodoById(Integer tid) {
+    if(tid == null || tid <= 0) {
+      return null;
+    }
+    return todoDAO.selectTodoById(tid);
+  } 
+  
+  @Override
+  public boolean updateTodo(TodoDTO todo) {
+    int updatedCount = todoDAO.updateTodo(todo);
+    return updatedCount > 0;
+  }
+  
+  @Override
+  public boolean deleteTodo(Integer tid) {
+    int deletedCount = todoDAO.deleteTodo(tid);
+    return deletedCount > 0;
+  }
+  
+  @Override
+  public boolean createTodo(TodoDTO todo) {
+    int insertedCount = todoDAO.insertTodo(todo);
+    return insertedCount > 0;
+  }
+  
 }
+
+
+
+

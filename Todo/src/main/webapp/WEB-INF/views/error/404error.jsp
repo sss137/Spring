@@ -10,25 +10,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <h1>Todo Write Form</h1>
-  <form method="post"
-        action="${contextPath}/td/create">
-    
-    <label for="title">제목</label>
-    <br>
-    <input type="text" id="title" name="title" value="${todo.title}">
-    <br>
-    
-    <label for="content">내용</label>
-    <br>
-    <textarea id="content" name="content">${todo.content}</textarea>
-    <br>
-    
-    <button type="submit">제출</button>      
-  </form>
+  <h1>해당 게시글을 찾을 수 없습니다.</h1>
+  <a href="${contextPath}">홈으로</a>
   
 </body>
 </html>
-
-
-
