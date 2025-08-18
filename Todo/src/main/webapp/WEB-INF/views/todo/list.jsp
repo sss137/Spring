@@ -23,7 +23,7 @@
   <table border="1">
     <caption>전체 게시물 개수: ${todoCount}개</caption>
     <tbody>
-    <c:forEach items="${todoList}" var="todo">    <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 todoDTO이다. --%>
+    <c:forEach items="${todoList}" var="todo">      <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 todoDTO이다. --%>
       <tr>
         <td><a href="${contextPath}/td/detail?tid=${todo.tid}">${todo.title}</a></td>
         <td>${todo.createdAt}</td>

@@ -1,7 +1,6 @@
 pom.xml
   <artifactId>TodoApp</...>
-
-http://localhost:8080/TodoApp    이 주소를 대표 주소로 부릅니다 : Context Path   ${contextPath}
+http://localhost:8080/TodoApp <<  이 주소를 대표 주소로 부릅니다 : Context Path   ${contextPath}
 --------------------------
 프로젝트 실행
   @RequestMapping(value = "/")  -> ContextPath 주소를 입력하면 main 메소드가 실행됩니다.
@@ -24,7 +23,6 @@ main.jsp
 TodoController
   @GetMapping("/todo/list")
   public String list() {
-    
     return "todo/list";
   }
 --------------------------
@@ -40,21 +38,19 @@ list.jsp
 TodoController
   @GetMapping("/todo/write")
   public String writeForm() {
-    
     return "todo/writeForm";
   }
 --------------------------
 등록
 writeForm.jsp
   <form method="post"
-        action="${contextPath}/todo/create">
+            action="${contextPath}/todo/create">
   
     <button type="submit">제출</button>      
   </form>
 TodoController
   @PostMapping("/todo/create")
   public String create() {
-    
     return "redirect:/todo/list";
   }
 --------------------------
@@ -72,7 +68,6 @@ http://localhost:8080/TodoApp/td/create
   @GetMapping("/td/write")
   @PostMapping("/td/create")
   public String create() {
-    
     return "redirect:/td/list";
   }
 --------------------------
@@ -101,7 +96,6 @@ list.jsp
 TodoController
   @GetMapping("/detail")
   public String detail() {
-    
     return "todo/detail";
   }
 --------------------------
@@ -116,7 +110,6 @@ detail.jsp
 TodoController
   @GetMapping("/edit")
   public String editForm() {
-    
     return "todo/editForm";
   }
 --------------------------
@@ -134,41 +127,39 @@ detail.jsp
 수정
 editForm.jsp
   <form method="post"
-        action="${contextPath}/td/update">
+            action="${contextPath}/td/update">
         
     <button type="submit">수정</button>      
   </form>
 TodoController
   @PostMapping("/update")
   public String update() {
-    
     return "redirect:/td/detail";
   }
 --------------------------
 삭제
   <form method="post"
-        action="${contextPath}/td/delete"
-        onsubmit="onDelete()">
+            action="${contextPath}/td/delete"
+            onsubmit="onDelete()">
   
     <button type="submit">삭제</button>      
   </form>
   <script type="text/javascript">
   	function onDelete() {
   	  // 취소하면 서브밋 방지하기
-  	  if ( !confirm("현재 게시글을 삭제하시겠습니까?") ) {
-  	    window.event.preventDefault();
+  	  if( !confirm("현재 게시글을 삭제하시겠습니까?")) {
+  	    event.preventDefault();
   	  }
   	}
   </script>
 TodoController
   @PostMapping("/delete")
   public String delete() {
-    
     return "redirect:/td/list";
   }
 --------------------------
 * 새 프로젝트 만들어서 연습
-  project
+ Practice
 --------------------------
 src/main/resources/schema.sql
 
@@ -204,7 +195,7 @@ src/main/resources/mybatis-config.xml
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-  <!-- 마이바티스 환경 설정 (snake_case To camelCase) -->
+  <!-- 마이바티스 환경 설정(snake_case To camelCase) -->
   <settings>
     <setting name="mapUnderscoreToCamelCase" value="true" />
   </settings>
@@ -220,19 +211,17 @@ src/main/resources/TodoMapper.xml
   
 <mapper namespace="org.shark.todo.mapper.TodoMapper">
 
-
-
 </mapper>
 --------------------------
 src/main/webapp/WEB-INF/spring/root-context.xml
-  -> Spring Container에 빈(객체) 만들기 (타입이 중요 : HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
+  -> Spring Container에 빈(객체) 만들기(타입이 중요: HikariConfig, HikariDataSource, SqlSessionFactoryBean, SqlSessionTemplate)
 
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <!-- 1. HikariConfig (jdbcURL에서 사용할 데이터베이스 지정) -->
+  <!-- 1. HikariConfig(jdbcURL에서 사용할 데이터베이스 지정) -->
   <bean class="com.zaxxer.hikari.HikariConfig" id="hikariConfig">
     <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
     <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db_todo?characterEncoding=UTF-8&amp;serverTimezone=UTC" />
@@ -245,7 +234,7 @@ src/main/webapp/WEB-INF/spring/root-context.xml
     <constructor-arg ref="hikariConfig" />
   </bean>
   
-  <!-- 3. SqlSessionFactoryBean (mybatis-config.xml 파일과 Mapper.xml 파일 위치 지정) -->
+  <!-- 3. SqlSessionFactoryBean(MyBatis가 설정 파일과 SQL 쿼리 파일을 어디서 읽어올지 알려주는 부분) -->
   <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
     <property name="dataSource" ref="hikariDataSource" />
     <property name="configLocation"  value="classpath:mybatis-config.xml" />
@@ -263,9 +252,9 @@ src/main/webapp/WEB-INF/spring/root-context.xml
 --------------------------
 MyBatis
 SQL Mapping Framework
-: Mapper.xml 에 저장된 쿼리를 자바에서 호출할 수 있도록 해 주는 프레임워크
-: Mapper.xml 에 저장된 쿼리마다 id를 부여하고, 해당 id를 이용해 자바에서 호출하는 방식
-: Mapper.xml 에 저장된 쿼리를 실행하는 건 SqlSessionTemplate 
+: Mapper.xml에 저장된 쿼리를 자바에서 호출할 수 있도록 해 주는 프레임워크
+: Mapper.xml에 저장된 쿼리마다 id를 부여하고, 해당 id를 이용해 자바에서 호출하는 방식
+: Mapper.xml에 저장된 쿼리를 실행하는 건 SqlSessionTemplate 
 * SqlSessionTemplate이 지원하는 메소드
 1. selectList()
 2. selectOne()
@@ -275,10 +264,10 @@ SQL Mapping Framework
 자바 웹 애플리케이션에서는 DAO가 쿼리문을 담당하므로, DAO에 SqlSessionTemplate을 가져다 두고 사용.
 --------------------------
 TodoDAO
-@Repository  ->  Spring Container에 빈(객체) 만들기 (TodoDAO 타입의 빈(todoDAO)이 생성됨)
+@Repository  ->  Spring Container에 빈(객체) 만들기(TodoDAO 타입의 빈(todoDAO)이 생성됨)
 public class TodoDAO {
 
-  @Autowired  ->  Spring Container에서 SqlSessionTemplate 타입의 빈 가져올 때 사용 (수업에서는 @RequiredArgsConstructor로 대신 처리)
+  @Autowired  ->  Spring Container에서 SqlSessionTemplate 타입의 빈 가져올 때 사용(수업에서는 @RequiredArgsConstructor로 대신 처리)
   private SqlSessionTemplate sqlSession;
 
 }
@@ -315,7 +304,7 @@ public interface TodoService {
 }
 
 TodoServiceImpl
-@Service  // Spring Container에 TodoService 타입의 빈이 생성
+@Service   //Spring Container에 TodoService 타입(인터페이스 타입으로 지정해야 함)의 빈 생성
 public class TodoServiceImpl implements TodoService {
 
   // TodoDAO 빈을 Spring Container에서 가져옵니다.
@@ -325,7 +314,7 @@ public class TodoServiceImpl implements TodoService {
   @Override
   public List<TodoDTO> getTodoList() {
     List<TodoDTO> todoList = todoDAO.todoList();
-    return todoList;  // 컨트롤러에게 todoList 반환하기
+    return todoList;   //컨트롤러에게 todoList 반환하기
   }
 
 }
@@ -373,10 +362,8 @@ public class TodoController {
   @GetMapping("/list")
   public String list(Model model) {
     Map<String, Object> map = todoService.getTodoList();
-    model.addAttribute("todoList", map.get("todoList"));    // 화면에서 확인할 수 있도록 모델에 바인딩 
+    model.addAttribute("todoList", map.get("todoList"));          // 화면에서 확인할 수 있도록 모델에 바인딩 
     model.addAttribute("todoCount", map.get("todoCount"));  // 화면에서 확인할 수 있도록 모델에 바인딩 
-    // System.out.println("todoList: " + map.get("todoList"));
-    // System.out.println("todoCount: " + map.get("todoCount"));
     return "todo/list";
   }
 
@@ -386,8 +373,7 @@ list.jsp
   <table border="1">
     <caption>전체 게시물 개수: ${todoCount}개</caption>
     <tbody>
-      <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 TodoDTO이다. --%>
-      <c:forEach items="${todoList}" var="todo">      
+      <c:forEach items="${todoList}" var="todo">      <%-- todoList의 타입은 List<TodoDTO>이므로 todo의 타입은 TodoDTO이다. --%>
         <tr>
           <td><a href="${contextPath}/td/detail">${todo.title}</a></td>
           <td>${todo.createdAt}</td>
@@ -420,7 +406,7 @@ TodoService
 TodoServiceImpl
   @Override
   public TodoDTO getTodoById(Integer tid) {
-    if (tid == null || tid <= 0) {
+    if(tid == null || tid <= 0) {
       return null;
     }
     return todoDAO.selectTodoById(tid);
@@ -430,11 +416,11 @@ TodoController
   @GetMapping("/detail")
   public String detail(@RequestParam(defaultValue = "0") Integer tid, Model model) {
     TodoDTO todo = todoService.getTodoById(tid);
-    if (todo == null) {
+    if(todo == null) {
       model.addAttribute("error", "해당 게시글을 찾을 수 없습니다.");
       return "error/404error";
     }
-    model.addAttribute("todo", todo);  // forward 시 모델에 바인딩
+    model.addAttribute("todo", todo);   //forward 시 모델에 바인딩
     return "todo/detail";
   }
 
@@ -462,19 +448,18 @@ TodoController
   @GetMapping("/edit")
   public String editForm(@RequestParam(defaultValue = "0") Integer tid, Model model) {
     TodoDTO todo = todoService.getTodoById(tid);
-    if (todo == null) {
+    if(todo == null) {
       model.addAttribute("error", "해당 게시글을 찾을 수 없습니다.");
       return "error/404error";
     }
-    model.addAttribute("todo", todo);  // forward 시 모델에 바인딩
+    model.addAttribute("todo", todo);   //forward 시 모델에 바인딩
     return "todo/editForm";
   }
 
 editForm.jsp
   <h1>Todo Edit Form</h1>
-  
   <form method="post"
-        action="${contextPath}/td/update">
+            action="${contextPath}/td/update">
     
     <label for="title">제목</label>
     <br>
@@ -487,8 +472,8 @@ editForm.jsp
     <br>
     
     <input type="hidden" name="tid" value="${todo.tid}">
-    <button type="submit">수정</button>
-    
+
+    <button type="submit">수정</button> 
   </form>
 
 error/404error.jsp
@@ -522,10 +507,13 @@ TodoServiceImpl
 
 TodoController
   @PostMapping("/update")
-  public String update(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+  public String update(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {      //@ModelAttribute 생략 가능
     boolean success = todoService.updateTodo(todo);
-    redirectAttr.addFlashAttribute("msg", success ? "수정 성공" : "수정 실패")  // redirect 시 리다이렉트어트리뷰트에 플래시로 바인딩
-                .addAttribute("tid", todo.getTid());  // 쿼리 스트링 만들어서 redirect 주소에 추가 (?tid=1)
+    redirectAttr.addFlashAttribute("msg", success ? "수정 성공" : "수정 실패")   //redirect 시 리다이렉트어트리뷰트에 플래시로 바인딩
+												         //1. 컨트롤러에서 FlashAttribute로 메시지를 넣음
+ 													 //2. redirect 후 JSP에서 ${msg} 로 사용 가능
+												         //3. 한 번 쓰면 사라짐(세션에 오래 남지 않음 → 안전)
+                   .addAttribute("tid", todo.getTid());   //쿼리 스트링 만들어서 redirect 주소에 추가(?tid=1)
     return "redirect:/td/detail";
   }
 
@@ -533,7 +521,7 @@ detail.jsp
   msg 출력 코드 추가
   <script type="text/javascript">
     const msg = "${msg}";
-    if (msg !== "")
+    if(msg !== "")
       alert(msg);
   </script>
 --------------------------
@@ -565,34 +553,36 @@ TodoServiceImpl
 TodoController
   @PostMapping("/delete")
   public String delete(@RequestParam(defaultValue = "0") Integer tid, RedirectAttributes redirectAttr) {
-    if (tid == null || tid <= 0) {
+    if(tid == null || tid <= 0) {
       redirectAttr.addFlashAttribute("deleteError", "삭제 실패");
       return "redirect:/td/list";
     }
     boolean success = todoService.deleteTodo(tid);
-    redirectAttr.addFlashAttribute("msg", success ? "삭제 성공" : "삭제 실패");
+    redirectAttr.addFlashAttribute("msg", success ? "삭제 성공" : "삭제 실패");   //redirect 시 리다이렉트어트리뷰트에 플래시로 바인딩
+												         //1. 컨트롤러에서 FlashAttribute로 메시지를 넣음
+ 													 //2. redirect 후 JSP에서 ${msg} 로 사용 가능
+												         //3. 한 번 쓰면 사라짐(세션에 오래 남지 않음 → 안전)
+
     return "redirect:/td/list";
   }
 
 list.jsp
   <script type="text/javascript">
-  
     const deleteError = "${deleteError}";
-    if (deleteError !== "")
+    if(deleteError !== "")
       alert(deleteError);
     
     const msg = "${msg}";
-    if (msg !== "")
+    if(msg !== "")
       alert(msg);
-    
   </script>
 --------------------------
 등록
 
 TodoMapper.xml
   <insert id="insertTodo" parameterType="org.shark.todo.model.dto.TodoDTO" useGeneratedKeys="true" keyProperty="tid">
-    INSERT INTO tbl_todo (title, content, created_at)
-    VALUES (#{title}, #{content}, CURRENT_TIMESTAMP)
+    INSERT INTO tbl_todo(title, content, created_at)
+    VALUES(#{title}, #{content}, CURRENT_TIMESTAMP)
   </insert>
 
 TodoDAO
@@ -614,7 +604,7 @@ TodoServiceImpl
 TodoController
   // 등록 후 목록으로 가기
   @PostMapping("/create")
-  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {      //@ModelAttribute 생략 가능
     boolean success = todoService.createTodo(todo);
     redirectAttr.addFlashAttribute("msg", success ? "등록 성공" : "등록 실패");
     return "redirect:/td/list";
@@ -624,6 +614,6 @@ TodoController
   public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
     boolean success = todoService.createTodo(todo);
     redirectAttr.addFlashAttribute("msg", success ? "등록 성공" : "등록 실패")
-                .addAttribute("tid", todo.getTid());
+                   .addAttribute("tid", todo.getTid());
     return "redirect:/td/detail";
   }

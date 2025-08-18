@@ -1,6 +1,6 @@
 create database db_todo;
 
-use db_todo;
+use   db_todo;
 
 create table tbl_todo (
   tid int not null primary key auto_increment,

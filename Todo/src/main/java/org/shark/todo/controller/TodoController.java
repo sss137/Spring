@@ -25,10 +25,8 @@ public class TodoController {
   @GetMapping("/list")
   public String list(Model model) {
     Map<String, Object> map = todoService.getTodoList();
-    model.addAttribute("todoList", map.get("todoList"));   //화면에서 확인할 수 있도록 모델에 바인딩
-    model.addAttribute("todoCount", map.get("todoCount")); //화면에서 확인할 수 있도록 모델에 바인딩
-//    System.out.println("todoList: " + map.get("todoList"));
-//    System.out.println("todoCount: " + map.get("todoCount"));
+    model.addAttribute("todoList", map.get("todoList"));     //화면에서 확인할 수 있도록 모델에 바인딩
+    model.addAttribute("todoCount", map.get("todoCount"));   //화면에서 확인할 수 있도록 모델에 바인딩
     return "todo/list";
   }
   
@@ -38,7 +36,7 @@ public class TodoController {
   }
   
   @PostMapping("/create")
-  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {
+  public String create(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {   //@ModelAttribute 생략 가능
     boolean success = todoService.createTodo(todo);
     redirectAttr.addFlashAttribute("msg", success ? "등록 성공" : "등록 실패");
     return "redirect:/td/list";
@@ -71,7 +69,10 @@ public class TodoController {
   @PostMapping("/update")
   public String update(@ModelAttribute TodoDTO todo, RedirectAttributes redirectAttr) {   //@ModelAttribute 생략 가능
     boolean success = todoService.updateTodo(todo);
-    redirectAttr.addFlashAttribute("msg", success ? "수정 성공" : "수정 실패") //redirect 시 RedirectAttributes에 플래시로 바인딩
+    redirectAttr.addFlashAttribute("msg", success ? "수정 성공" : "수정 실패") //redirect 시 redirectAttr에 플래시로 바인딩
+                                                                               //1. 컨트롤러에서 FlashAttribute로 메시지를 넣음
+                                                                               //2. redirect 후 JSP에서 ${msg} 로 사용 가능
+                                                                               //3. 한 번 쓰면 사라짐(세션에 오래 남지 않음 → 안전)
                 .addAttribute("tid", todo.getTid());   //쿼리시트링 만들어서 redirect 주소에 추가(?tid=1)
     return "redirect:/td/detail";
   }

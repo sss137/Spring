@@ -15,11 +15,17 @@ public class TodoServiceImpl implements TodoService {
   @Autowired
   private TodoDAO todoDAO;
   
+  
+//  @Override
+//  public List<TodoDTO> getTodoList() {
+//    List<TodoDTO> todoList = todoDAO.todoList();
+//    return todoList;   //컨트롤러에게 todoList 반환하기
+//  }
   @Override
   public Map<String, Object> getTodoList() {
     List<TodoDTO> todoList = todoDAO.todoList();
     Integer todoCount = todoDAO.todoCount();
-    return Map.of("todoList", todoList, "todoCount", todoCount);   //컨트롤러에게 todoList 반환하기
+    return Map.of("todoList", todoList, "todoCount", todoCount);
   }
   
   @Override
