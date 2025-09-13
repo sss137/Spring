@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 /**
  * 페이징 계산, 페이징 UI(HTML) 생성 유틸리티 클래스
  */
-@Component   //Spring Container에 PageUtil 타입의 빈이 등록됩니다.
+
+@Component  //----- Spring Container에 PageUtil 타입의 빈이 등록됩니다.
 public class PageUtil {
 
-  //한 블록 당 표시할 페이지의 개수
+  //----- 한 블록 당 표시할 페이지의 개수
   private static final int PAGE_PER_BLOCK = 10;
  
   /**
@@ -38,13 +39,13 @@ public class PageUtil {
    */
   public String getPagingHtml(PageDTO dto, String requestURL, Map<String, Object> params) {
     
-    //페이지 이동 링크 생성에 필요한 변수
+    //----- 페이지 이동 링크 생성에 필요한 변수
     int page = dto.getPage();
     int pageCount = dto.getPageCount();
     int beginPage = dto.getBeginPage();
     int endPage = dto.getEndPage();
     
-    //쿼리 스트링 만들기
+    //----- 쿼리 스트링 만들기
     String queryString = "";
     if (params != null) {
       StringBuilder queryStringBuilder = new StringBuilder();
@@ -59,7 +60,7 @@ public class PageUtil {
     
     StringBuilder builder = new StringBuilder();
     
-    //스타일 적용 예시
+    //----- 스타일 적용 예시
     builder.append("<style>");
     builder.append(".pagination { display: flex; justify-content: center; width: 400px; margin: 0 auto; }");
     builder.append(".pagination button { display: block; border: none; background-color: #fff; text-align: center; width: 30px; height: 30px; line-height: 30px; cursor: pointer; }");
@@ -67,16 +68,16 @@ public class PageUtil {
     builder.append(".pagination .focus-page { color: limegreen; }");
     builder.append("</style>");
     
-    //<div class="pagination">
+    //----- <div class="pagination">
     builder.append("<div class=\"pagination\">");
     
-    //이전 블록( < )
+    //----- 이전 블록 ( < )
     if(beginPage == 1)
       builder.append("<button type=\"button\" class=\"disabled-button\">&lt;</button>");
     else
       builder.append("<button type=\"button\" onclick=\"location.href='" + requestURL + "?page=" + (beginPage - 1) + queryString + "'\">&lt;</button>");
     
-    //페이지(1 2 3 4 5 6 7 8 9 10)
+    //----- 페이지 ( 1 2 3 4 5 6 7 8 9 10 )
     for (int p = beginPage; p <= endPage; p++) {
       if (p == page)
         builder.append("<button type=\"button\" class=\"focus-page\" onclick=\"location.href='" + requestURL + "?page=" + (p) + queryString + "'\">" + p + "</button>");
@@ -84,13 +85,13 @@ public class PageUtil {
         builder.append("<button type=\"button\" onclick=\"location.href='" + requestURL + "?page=" + (p) + queryString + "'\">" + p + "</button>");        
     }
     
-    //다음 블록( > )
+    //----- 다음 블록 ( > )
     if(endPage == pageCount)
       builder.append("<button type=\"button\" class=\"disabled-button\">&gt;</button>");
     else
       builder.append("<button type=\"button\" onclick=\"location.href='" + requestURL + "?page=" + (endPage + 1) + queryString + "'\">&gt;</button>");
     
-    //</div>
+    //----- </div>
     builder.append("</div>");
     
     return builder.toString();
@@ -98,6 +99,3 @@ public class PageUtil {
   }
   
 }
-
-
-

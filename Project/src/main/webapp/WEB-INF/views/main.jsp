@@ -10,8 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <h1>Main</h1>
-  <a href="${contextPath}/prac/list">리스트</a>
+  <h1>Hello World</h1>
   
 </body>
 </html>

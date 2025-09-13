@@ -16,7 +16,7 @@
     <beans:property name="suffix" value=".jsp" />
   </beans:bean>
   
-  <context:component-scan base-package="org.shark.practice" />
+  <context:component-scan base-package="org.shark.project" />
   
 </beans:beans>
 

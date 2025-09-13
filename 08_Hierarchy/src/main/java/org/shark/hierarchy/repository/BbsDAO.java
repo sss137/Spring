@@ -14,15 +14,15 @@ import lombok.RequiredArgsConstructor;
 public class BbsDAO {
 
   private final SqlSessionTemplate sqlSession;
-
+  
   public int insertParentBbs(BbsDTO bbsDTO) {
     return sqlSession.insert("mybatis.mapper.bbsMapper.insertParentBbs", bbsDTO);
   }
-
+  
   public int updateGroupId(BbsDTO bbsDTO) {
     return sqlSession.update("mybatis.mapper.bbsMapper.updateGroupId", bbsDTO);
   }
-  
+
   public int updateGroupOrder(BbsDTO bbsDTO) {
     return sqlSession.update("mybatis.mapper.bbsMapper.updateGroupOrder", bbsDTO);
   }
@@ -38,13 +38,9 @@ public class BbsDAO {
   public Integer getBbsCount() {
     return sqlSession.selectOne("mybatis.mapper.bbsMapper.getBbsCount");
   }
-  
+
   public List<BbsDTO> getBbsList(PageDTO dto) {
     return sqlSession.selectList("mybatis.mapper.bbsMapper.getBbsList", dto);
   }
   
 }
-
-
-
-

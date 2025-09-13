@@ -11,6 +11,5 @@
 </head>
 <body>
   <a href="${contextPath}/bbs/list">계층게시판</a>
-  
 </body>
 </html>
